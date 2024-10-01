@@ -1,10 +1,10 @@
-# S3 File Uploader
+# Data Ingestion Service (DIS) File Uploader
 
 This project provides a Python script to upload files to an Amazon S3 bucket using pre-signed URLs. The script uses the `requests` library to handle HTTP requests and the built-in `logging` module to log the status of each file upload.
 
 ## Table of Contents
 
-- [S3 File Uploader](#s3-file-uploader)
+- [Data Ingestion Service (DIS) File Uploader](#data-ingestion-service-dis-file-uploader)
   - [Table of Contents](#table-of-contents)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
