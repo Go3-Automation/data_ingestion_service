@@ -71,7 +71,7 @@ def generate_upload_url(data_package_id, entity_name):
     return dis_api_call(url, payload, headers)
 
 
-def complate_upload(data_package_id):
+def complete_upload(data_package_id):
     """
     Complete upload session and block given dataPackageId from further upload.
 
@@ -129,4 +129,4 @@ if __name__ == "__main__":
             logger.info(f"Uploading files {files_to_upload}") 
             upload_files_to_s3(files_to_upload, result['response']['presignedUrlData'])
             logger.info(f"Completing upload for {data_package_id}")
-            result = complate_upload(data_package_id)
+            result = complete_upload(data_package_id)
