@@ -1,4 +1,21 @@
-.venv/
-credentials.py
-.vscode/launch.json
+# Byte-compiled files
 __pycache__/
+*.py[cod]
+
+# Virtual environments
+.venv/
+
+# Distribution files
+build/
+dist/
+
+# Logs and temporary files
+*.log
+*.tmp
+
+# IDE/editor files
+.vscode/
+
+# OS-specific files
+.DS_Store
+Thumbs.db

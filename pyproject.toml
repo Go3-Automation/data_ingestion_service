@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "data_ingestion_service"
+version = "0.1.0"
+description = "A service for data ingestion via DIIP API"
+authors = [{ name = "Your Name" }]
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.6"
+dependencies = [
+    "requests",
+    "botocore",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/your-org/data_ingestion_service"

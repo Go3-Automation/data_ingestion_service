@@ -1,3 +1,44 @@
+# data_ingestion_service/data_ingestion_service/README.md
+
+# Data Ingestion Service
+
+A service for data ingestion via the DIIP API.
+
+## Installation
+
+To install the package from Git, use the following command:
+
+```
+pip install git+https://github.com/your-org/data_ingestion_service.git
+```
+
+## Usage
+
+Here is an example of how to use the `diip_uploader` class:
+
+```python
+from data_ingestion_service.upload import diip_uploader
+
+base_url = "https://ingest-api.uat.diip.go3.tv"
+api_key = "your-api-key"
+
+with diip_uploader(base_url=base_url, api_key=api_key) as session:
+    session.upload_file(entity_name="example_entity", file="path/to/your/file.csv")
+```
+
+## Running Tests
+
+To run the tests, you can use the following command:
+
+```
+pytest tests/
+```
+
+## License
+
+This project is licensed under the MIT License. See the LICENSE file for details.
+
+# OLD REDME TO BE UPDATES
 # Data Ingestion Service (DIS) File Uploader
 
 This project provides a Python script to upload files to an Amazon S3 bucket using pre-signed URLs. The script uses the `requests` library to handle HTTP requests and the built-in `logging` module to log the status of each file upload.
