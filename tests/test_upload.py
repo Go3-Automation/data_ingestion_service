@@ -1,5 +1,5 @@
 import unittest
-from data_ingestion_service.upload import diip_uploader
+from data_ingestion_service.upload import DIIPUploader
 from unittest.mock import patch, MagicMock
 
 class TestDiipUploader(unittest.TestCase):
@@ -9,7 +9,7 @@ class TestDiipUploader(unittest.TestCase):
         mock_requests.post.return_value.status_code = 204
         mock_requests.post.return_value.text = ''
         
-        with diip_uploader(base_url='https://ingest-api.uat.diip.go3.tv', api_key='your-api-key') as uploader:
+        with DIIPUploader(base_url='https://ingest-api.uat.diip.go3.tv', api_key='your-api-key') as uploader:
             uploader.upload_file(entity_name='test_entity', file='test_file.txt')
 
         mock_requests.post.assert_called_once()
@@ -19,7 +19,7 @@ class TestDiipUploader(unittest.TestCase):
         mock_requests.post.return_value.status_code = 204
         mock_requests.post.return_value.text = ''
         
-        with diip_uploader(base_url='https://ingest-api.uat.diip.go3.tv', api_key='your-api-key') as uploader:
+        with DIIPUploader(base_url='https://ingest-api.uat.diip.go3.tv', api_key='your-api-key') as uploader:
             uploader.upload_file(entity_name='test_entity', file=MagicMock(), file_name='test_file.txt')
 
         mock_requests.post.assert_called_once()
@@ -32,7 +32,7 @@ class TestDiipUploader(unittest.TestCase):
         streaming_body_mock = MagicMock()
         streaming_body_mock.read.return_value = b'test content'
         
-        with diip_uploader(base_url='https://ingest-api.uat.diip.go3.tv', api_key='your-api-key') as uploader:
+        with DIIPUploader(base_url='https://ingest-api.uat.diip.go3.tv', api_key='your-api-key') as uploader:
             uploader.upload_file(entity_name='test_entity', file=streaming_body_mock, file_name='test_file.txt')
 
         mock_requests.post.assert_called_once()
@@ -42,7 +42,7 @@ class TestDiipUploader(unittest.TestCase):
         mock_requests.post.return_value.status_code = 400
         mock_requests.post.return_value.text = 'Bad Request'
         
-        with diip_uploader(base_url='https://ingest-api.uat.diip.go3.tv', api_key='your-api-key') as uploader:
+        with DIIPUploader(base_url='https://ingest-api.uat.diip.go3.tv', api_key='your-api-key') as uploader:
             with self.assertRaises(Exception) as context:
                 uploader.upload_file(entity_name='test_entity', file='test_file.txt')
 
