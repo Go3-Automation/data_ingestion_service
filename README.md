@@ -1,5 +1,3 @@
-# data_ingestion_service/data_ingestion_service/README.md
-
 # Data Ingestion Service
 
 A Python package for uploading files to the DIIP API using presigned S3 URLs.
