@@ -2,8 +2,21 @@
 
 # Data Ingestion Service
 
-A Python package for uploading files to the DIIP API using presigned S3 URLs.  
-This package provides a context manager class, `DIIPUploader`, that handles session initialization, file upload, and session completion for you.
+A Python package for uploading files to the DIIP API using presigned S3 URLs.
+DIIP (Data Ingestion & Integration Platform) is a data lake of Go3. Used for
+various integrations. 
+This package provides a wrapper for the DIIP API in form of python __context manager__ 
+class, `DIIPUploader`, that handles session initialization, file upload, 
+and session completion for you.
+Makes the usage as simple as writin to the file:
+
+```python
+from data_ingestion_service.upload import DIIPUploader
+
+with DIIPUploader(diip_url, api_key) as session:
+    session.upload(file_path, 'test_report')
+
+```
 
 ---
 
@@ -16,19 +29,20 @@ It abstracts away the details of authentication, session management, and S3 pres
 
 ## Installation
 
-Clone the repository and install in editable mode (recommended for development):
+Install directly from Git:
 
 ```bash
-git clone https://github.com/your-org/data_ingestion_service.git
+pip install git+https://github.com/Go3-Automation/data_ingestion_service.git
+```
+
+Or clone the repository and install in editable mode (recommended for development):
+
+```bash
+git clone https://github.com/Go3-Automation/data_ingestion_service.git
 cd data_ingestion_service
 pip install -e .
 ```
 
-Or install directly from Git:
-
-```bash
-pip install git+https://github.com/your-org/data_ingestion_service.git
-```
 
 ---
 
@@ -48,11 +62,13 @@ from data_ingestion_service.upload import DIIPUploader
 ### 3. Upload a file using the context manager
 
 ```python
+from data_ingestion_service.upload import DIIPUploader
+
 base_url = "https://ingest-api.uat.diip.go3.tv"
 api_key = "your-api-key-loaded-from-env-variables"
 
-with DIIPUploader(base_url=base_url, api_key=api_key) as uploader:
-    uploader.upload_file(
+with DIIPUploader(base_url=base_url, api_key=api_key) as session:
+    session.upload_file(
         # entity_name: Logical name for your data (e.g., table or report) 
         # Agree with DIIP adinistrator, what is be best way to store data. 
         # It will have impact on the data analysis down the data stream
@@ -73,10 +89,12 @@ If you have a file-like object (e.g., `io.BytesIO` or `StreamingBody`), provide 
 
 ```python
 import io
+from data_ingestion_service.upload import DIIPUploader
 
-with DIIPUploader(base_url=base_url, api_key=api_key) as uploader:
+
+with DIIPUploader(base_url=base_url, api_key=api_key) as session:
     file_obj = io.BytesIO(b"some,data,to,upload\n1,2,3,4")
-    uploader.upload_file(
+    session.upload_file(
         # entity_name: Logical name for your data (e.g., table or report) 
         # Agree with DIIP adinistrator, what will be best way to store data. 
         # It will have impact on the data analysis down the data stream
@@ -96,18 +114,20 @@ with DIIPUploader(base_url=base_url, api_key=api_key) as uploader:
 
 ## How it works
 
-- When you enter the `with DIIPUploader(...) as uploader:` block, a session is initialized with the DIIP API.
+- When you enter the `with DIIPUploader(...) as session:` block, a session is initialized with the DIIP API.
 - You can call `uploader.upload_file(...)` as many times as needed within the block/session you may use different entities.
 - When you exit the block, the session is completed and finalized with the DIIP API.
 
 ---
 
 ## Running Tests
+Make sure the correct pytest is used.
 
 To run the tests, use:
 
 ```bash
-pytest tests/
+cd tests
+pytest
 ```
 
 ---
