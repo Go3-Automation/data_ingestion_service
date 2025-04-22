@@ -1,0 +1,12 @@
+LICENSE
+README.md
+pyproject.toml
+setup.py
+data_ingestion_service/__init__.py
+data_ingestion_service/upload.py
+data_ingestion_service.egg-info/PKG-INFO
+data_ingestion_service.egg-info/SOURCES.txt
+data_ingestion_service.egg-info/dependency_links.txt
+data_ingestion_service.egg-info/requires.txt
+data_ingestion_service.egg-info/top_level.txt
+tests/test_upload.py

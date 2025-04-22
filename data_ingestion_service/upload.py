@@ -5,7 +5,6 @@ __all__ = ["DIIPUploader"]
 import requests
 import io
 import logging
-from typing import Union, BinaryIO
 from datetime import datetime, timedelta
 from botocore.response import StreamingBody
 
@@ -57,19 +56,19 @@ class DIIPUploader:
             logger.error(f"An error occurred: {exc_value}")
         logger.info("Exiting DIIPUploader context.")
 
-    def upload_file(self, entity_name: str, file: str | BinaryIO | StreamingBody, file_name: str = None):
+    def upload_file(self, entity_name: str, file: str | io.BytesIO | StreamingBody, file_name: str = None):
         """
         Upload a file to the DIIP API on an open session.
 
         Args:
             entity_name (str): The name of the entity to associate with the file (e.g., table name, source name, report name).
-            file (str | BinaryIO | StreamingBody): The file to upload. Can be:
+            file (str | io.BytesIO | StreamingBody): The file to upload. Can be:
                 - file path (str): File will be read locally and sent to S3.
-                - object (BinaryIO): An in-memory file object (e.g., already open file).
+                - object (io.BytesIO): An in-memory file object (e.g., already open file).
                 - object (StreamingBody): An object from boto3 S3 client (e.g., response from get_object).
             file_name (str): File name to be used for the file on the destination after upload.
                              Optional for the file (str).
-                             Required if `file` is a BinaryIO or StreamingBody object as there is no name associated.
+                             Required if `file` is a io.BytesIO or StreamingBody object as there is no name associated.
         """
         entity_url = self._get_diip_upload_entity_url(self._clean_name_for_s3(entity_name))
 
@@ -77,14 +76,14 @@ class DIIPUploader:
             file_name = file_name or self._extract_file_name(file)
             with open(file, "rb") as f:
                 self._upload_to_s3(f, entity_url, file_name)
-        elif isinstance(file, (BinaryIO, StreamingBody)):  # In-memory or StreamingBody
+        elif isinstance(file, (io.BytesIO, StreamingBody)):  # In-memory or StreamingBody
             if not file_name:
-                raise ValueError("file_name must be provided when uploading a BinaryIO or StreamingBody object.")
+                raise ValueError("file_name must be provided when uploading a io.BytesIO or StreamingBody object.")
             if isinstance(file, StreamingBody):
                 file = self._convert_streaming_body_to_bytesio(file)
             self._upload_to_s3(file, entity_url, file_name)
         else:
-            raise TypeError("file must be a file path (str), a BinaryIO object, or a StreamingBody object.")
+            raise TypeError("file must be a file path (str), a io.BytesIO object, or a StreamingBody object.")
 
     def _initialize_upload(self) -> str:
         """Initialize the upload session and return the dataPackageId. It is happening every time the context manager is entered."""
@@ -111,7 +110,7 @@ class DIIPUploader:
         logger.info(f"Generated and cached entity URL for entity: {entity_name}")
         return entity_url
 
-    def _upload_to_s3(self, file_obj: BinaryIO, entity_url: dict, file_name: str):
+    def _upload_to_s3(self, file_obj: io.BytesIO, entity_url: dict, file_name: str):
         """Upload a file to S3 using the provided entity URL."""
         response = requests.post(
             entity_url["url"],
